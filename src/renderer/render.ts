@@ -6,6 +6,18 @@ interface IApp {
 }
 
 
+/**
+ * Class for rendering components
+ * 
+ * @example
+ * 
+ * const app = new App();
+ * app.mount({
+ *  component: () => `<div id="app">Hello world</div>`,
+ *  target: '#root',
+ *  callback: (node) => console.log(node)
+ * });
+ */
 class App implements IApp {
 
     static app: App | null = new App();
@@ -19,6 +31,13 @@ class App implements IApp {
         }
     }
 
+    /**
+     * Render a component as a DocumentFragment
+     * 
+     * @param component - The component to render
+     * @returns The rendered DocumentFragment or null
+     * @throws Error if the root component is not found
+     */
     render(component: Component): DocumentFragment | null {
         const vNode = document.createDocumentFragment();
         const componentNode = new DOMParser().parseFromString(component(), 'text/html');
@@ -38,6 +57,17 @@ class App implements IApp {
      
 
     }
+    /**
+     * Mounts a component to a specified target in the DOM once the content is fully loaded.
+     * 
+     * @param {Object} options - Options for the mount operation.
+     * @param {Component} options.component - The component to render and mount.
+     * @param {string} options.target - The CSS selector of the target element to mount the component to.
+     * @param {Function} [options.callback] - Optional callback function to be executed with the mounted node.
+     * 
+     * @throws Error if the target element is not found.
+     */
+
     mount({component, target, callback}: { component: Component, target: string, callback?: (node: HTMLElement) => void}) {
        document.addEventListener('DOMContentLoaded', () => {
         const componentHTML = this.render(component)
